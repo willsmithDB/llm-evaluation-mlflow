@@ -1,4 +1,18 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC # Evaluation of RAG (Retrieval-Augmented Generation) chain using Databricks Foundation Model APIs and MLflow!
+# MAGIC
+# MAGIC - We will use langchain to pull MLflow documentation and chunk it. 
+# MAGIC - We will use the Databricks Foundation Model APIs to automatically compute embeddings from the chunks. 
+# MAGIC - We will then create an index within a Databricks Vector Search index to hold the embeddings and act as a retriever for our RAG chain. 
+# MAGIC - DBRX from the Databricks Foundation Model APIs will be our primary model for our RAG chain.
+# MAGIC - We log all of this in mlflow so that we can have the run history and associated artifacts stored!
+# MAGIC - After creating the RAG chain, we will set up our evaluation metrics including toxicity and faithfulness. 
+# MAGIC   - We will be using an additional LLM from the Foundation Model APIs to perform LLM-as-a-judge on our outputs. 
+# MAGIC - Finally, we will evaluate our RAG chain and display the results! 
+
+# COMMAND ----------
+
 # DBTITLE 1,Install / Update dependencies
 # MAGIC %pip install -U langchain langchain_community databricks-vectorsearch mlflow
 # MAGIC
@@ -14,7 +28,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run "./utils/setup" $catalog_name="will_smith" $schema_name="fmapi_eval" $volume_name="fmapi_vol" $vector_search_endpoint_name="one-env-shared-endpoint-7"
+# MAGIC %run "./utils/setup" $catalog_name="CATALOG" $schema_name="fmapi_eval" $volume_name="fmapi_vol" $vector_search_endpoint_name="VECTOR_SEARCH"
 
 # COMMAND ----------
 
