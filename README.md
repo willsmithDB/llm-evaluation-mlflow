@@ -15,20 +15,54 @@ This collection is meant to get individuals quickly started in evaluating their 
 [Notebooks](#notebooks)  
 
 [Examples](#examples)
-[Example with Foundation Model APIs](#fmapi-rag)  
+[Example with Foundation Model APIs](#foundation-model-apis-and-rag)  
 [Example with Langchain for Retrieval-Augmented Generation](#langchain-rag)  
-[Example with OpenAI models](#open-ai)
+[Example with OpenAI models](#open-ai-models)
 
 ## Get Started
 
-### Get Started: Requirements
-### Get Started: Notebooks
+### Requirements
+### Notebooks
 
 ## Examples:  
 
-### Examples: Foundation Model APIs & RAG
+### Foundation Model APIs and RAG
+
 ![Result Table](./img/RAG_results.png)
-### Examples: Langchain RAG
-### Examples: Open AI Models 
+### Langchain RAG
+### Open AI Models 
+
+Registering an external model is as easy as the following:
+
+```
+import mlflow.deployments
+
+client = mlflow.deployments.get_deploy_client("databricks")
+
+client.create_endpoint(
+    name=dbutils.widgets.get("LLM_ENDPOINT_NAME"),
+    config={
+        "served_entities": [
+            {
+                "external_model": {
+                    "name": dbutils.widgets.get("LLM_MODEL_NAME"),
+                    "provider": "openai",
+                    "task": "llm/v1/chat",
+                    "openai_config": {
+                        "openai_api_type": dbutils.widgets.get("OPENAI_API_TYPE"),
+                        "openai_api_key": API_KEY,
+                        "openai_api_base": dbutils.widgets.get("API_BASE"),
+                        "openai_deployment_name": dbutils.widgets.get("DEPLOYMENT_NAME"),
+                        "openai_api_version": dbutils.widgets.get("OPENAI_API_VERSION"),
+                    },
+                }
+            }
+        ]
+    },
+)
+```
+
+You can see the evaluation results after running mlflow.evaluate():
+
 ![Result Table](./img/external_model_table.png)
 ![Cell UI](./img/external_model_cell.png)
