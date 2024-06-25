@@ -28,11 +28,58 @@ This collection is meant to get individuals quickly started in evaluating their 
 
 ### Foundation Model APIs and RAG
 
+#### Evaluation of RAG (Retrieval-Augmented Generation) chain using Databricks Foundation Model APIs and MLflow!
+
+- We will use langchain to pull MLflow documentation and chunk it. 
+- We will use the Databricks Foundation Model APIs to automatically compute embeddings from the chunks. 
+- We will then create an index within a Databricks Vector Search index to hold the embeddings and act as a retriever for our RAG chain. 
+- DBRX from the Databricks Foundation Model APIs will be our primary model for our RAG chain.
+- We log all of this in mlflow so that we can have the run history and associated artifacts stored!
+- After creating the RAG chain, we will set up our evaluation metrics including toxicity and faithfulness. 
+  - We will be using an additional LLM from the Foundation Model APIs to perform LLM-as-a-judge on our outputs. 
+- Finally, we will evaluate our RAG chain and display the results! 
+
+#### Using the Foundation Model APIs is as easy as the following:
+
+```
+import os
+from langchain_community.llms import Databricks
+from langchain_core.messages import HumanMessage, SystemMessage
+
+def transform_input(**request):
+  request["messages"] = [
+    {
+      "role": "user",
+      "content": request["prompt"]
+    }
+  ]
+  del request["prompt"]
+  return request
+
+# databricks-meta-llama-3-70b-instruct or databricks-dbrx-instruct
+llm = Databricks(endpoint_name="databricks-dbrx-instruct", transform_input_fn=transform_input, extra_params={"temperature": 0.1, "max_tokens":512})
+```
+
 ![Result Table](./img/RAG_results.png)
 ### Langchain RAG
+
+
+
 ### Open AI Models 
 
-Registering an external model is as easy as the following:
+#### Evaluation of RAG (Retrieval-Augmented Generation) chain using Azure OpenAI [Databricks External Models] and MLflow!
+
+- We will register the Azure Open AI gpt-35-turbo and text-embedding-ada-002 for use as external models.
+- We will use langchain to pull MLflow documentation and chunk it. 
+- We will use the Azure Open AI text-embedding-ada-002 to automatically compute embeddings from the chunks. 
+- We will then create an index within a Databricks Vector Search index to hold the embeddings and act as a retriever for our RAG chain. 
+- Chat GPT 3.5 Turbo from Azure OpenAI will be our primary model for our RAG chain.
+- We log all of this in mlflow so that we can have the run history and associated artifacts stored!
+- After creating the RAG chain, we will set up our evaluation metrics including toxicity and faithfulness. 
+  - We will be using an additional LLM from the Foundation Model APIs to perform LLM-as-a-judge on our outputs. 
+- Finally, we will evaluate our RAG chain and display the results! 
+
+#### Registering an external model is as easy as the following:
 
 ```
 import mlflow.deployments
