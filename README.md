@@ -11,13 +11,12 @@ This collection is meant to get individuals quickly started in evaluating their 
 NOTE: This repo works on Azure Databricks currently and would need slight configuration changes for AWS and GCP. 
 
 # Table of Contents 
+
 -----------
 
 [Get Started](#get-started)  
 [Requirements](#requirements)  
 [Notebooks](#notebooks)  
-
------------
 
 [Examples](#examples)  
 [Example with Foundation Model APIs](#foundation-model-apis-and-rag)    
@@ -61,8 +60,8 @@ databricks-vectorsearch==0.38
 -----------
 
 ### Notebooks
------------
-##### 1. FMAPI-Langchain-MLflow-Text-QA
+
+##### FMAPI-Langchain-MLflow-Text-QA
 - Construct a RAG chain using Databricks Foundation Model APIs! 
     - DBRX
     - Databricks-BGE-Large
@@ -70,9 +69,10 @@ databricks-vectorsearch==0.38
     - DBRX
     - Llama-3-70b-Instruct 
 - Evaluate the chain using mlflow evaluate.
-##### 2. Custom-Model-Langchain-MLflow-Text-QA
 -----------
-##### 3. External-Models-OpenAI-Langchain-MLflow-Text-QA
+##### Custom-Model-Langchain-MLflow-Text-QA
+-----------
+##### External-Models-OpenAI-Langchain-MLflow-Text-QA
 - Construct a RAG chain using Langchain and Azure OpenAI models. 
     - ChatGPT 3.5 Turbo
     - Text Embedding Ada 002
@@ -80,8 +80,7 @@ databricks-vectorsearch==0.38
 - Evaluate the chain using mlflow evaluate. 
 -----------
 ## Examples:  
------------
-#### 1. Foundation Model APIs and RAG
+#### Foundation Model APIs and RAG
 
 ##### Evaluation of RAG (Retrieval-Augmented Generation) chain using Databricks Foundation Model APIs and MLflow!
 
@@ -116,11 +115,13 @@ llm = Databricks(endpoint_name="databricks-dbrx-instruct", transform_input_fn=tr
 ```
 
 ![Result Table](./img/RAG_results.png)
-#### 2. Langchain RAG
+
+-----------
+#### Langchain RAG
 
 -----------
 
-#### 3. Open AI Models 
+#### Open AI Models 
 
 ##### Evaluation of RAG (Retrieval-Augmented Generation) chain using Azure OpenAI [Databricks External Models] and MLflow!
 
