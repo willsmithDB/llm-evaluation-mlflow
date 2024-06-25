@@ -27,6 +27,7 @@ This collection is meant to get individuals quickly started in evaluating their 
 ## Examples:  
 
 ### Examples: Foundation Model APIs & RAG
+![Result Table](./img/RAG_results.png)
 ### Examples: Langchain RAG
 ### Examples: Open AI Models 
 ![Result Table](./img/external_model_table.png)
