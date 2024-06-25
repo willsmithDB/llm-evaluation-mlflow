@@ -11,15 +11,20 @@ This collection is meant to get individuals quickly started in evaluating their 
 NOTE: This repo works on Azure Databricks currently and would need slight configuration changes for AWS and GCP. 
 
 # Table of Contents 
+-----------
 
 [Get Started](#get-started)  
 [Requirements](#requirements)  
 [Notebooks](#notebooks)  
 
-[Examples](#examples)
-[Example with Foundation Model APIs](#foundation-model-apis-and-rag)  
-[Example with Langchain for Retrieval-Augmented Generation](#langchain-rag)  
-[Example with OpenAI models](#open-ai-models)
+-----------
+
+[Examples](#examples)  
+[Example with Foundation Model APIs](#foundation-model-apis-and-rag)    
+[Example with Langchain for Retrieval-Augmented Generation](#langchain-rag)    
+[Example with OpenAI models](#open-ai-models)   
+
+-----------
 
 ## Get Started
 
@@ -29,6 +34,8 @@ NOTE: This repo works on Azure Databricks currently and would need slight config
 - Attach to interactive clusters
 - Modify the variables for your personal organization 
 - Run notebooks to completion 
+
+-----------
 
 ### Requirements
 
@@ -51,8 +58,10 @@ mlflow==2.14.1
 langchain_openai==0.1.9 
 databricks-vectorsearch==0.38
 ```
+-----------
 
 ### Notebooks
+-----------
 ##### 1. FMAPI-Langchain-MLflow-Text-QA
 - Construct a RAG chain using Databricks Foundation Model APIs! 
     - DBRX
@@ -62,16 +71,16 @@ databricks-vectorsearch==0.38
     - Llama-3-70b-Instruct 
 - Evaluate the chain using mlflow evaluate.
 ##### 2. Custom-Model-Langchain-MLflow-Text-QA
-
+-----------
 ##### 3. External-Models-OpenAI-Langchain-MLflow-Text-QA
 - Construct a RAG chain using Langchain and Azure OpenAI models. 
     - ChatGPT 3.5 Turbo
     - Text Embedding Ada 002
 - Use Databricks Foundation Model APIs for LLM-as-a-judge or ChatGPT. 
 - Evaluate the chain using mlflow evaluate. 
-
+-----------
 ## Examples:  
-
+-----------
 #### 1. Foundation Model APIs and RAG
 
 ##### Evaluation of RAG (Retrieval-Augmented Generation) chain using Databricks Foundation Model APIs and MLflow!
@@ -109,7 +118,7 @@ llm = Databricks(endpoint_name="databricks-dbrx-instruct", transform_input_fn=tr
 ![Result Table](./img/RAG_results.png)
 #### 2. Langchain RAG
 
-
+-----------
 
 #### 3. Open AI Models 
 
