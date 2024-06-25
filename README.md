@@ -8,6 +8,8 @@ __See the [technical blog](https://community.databricks.com/t5/technical-blog/ml
 
 This collection is meant to get individuals quickly started in evaluating their large language models and retrieval-augmented-generation chains with [mlflow evaluate](https://mlflow.org/docs/latest/llms/llm-evaluate/index.html)!
 
+NOTE: This repo works on Azure Databricks currently and would need slight configuration changes for AWS and GCP. 
+
 # Table of Contents 
 
 [Get Started](#get-started)  
@@ -21,9 +23,37 @@ This collection is meant to get individuals quickly started in evaluating their 
 
 ## Get Started
 
+- Clone the Repo using [Databricks Repos](https://learn.microsoft.com/en-us/azure/databricks/repos/)
+- Create cluster config (See Requirements)
+- Open the notebooks within Databricks 
+- Attach to interactive clusters
+- Modify the variables for your personal organization 
+- Run notebooks to completion 
+
 ### Requirements
+
+##### Tested with:
+- Databricks Runtime: 14.3 LTS ML 
+    - (includes Apache Spark 3.5.0, Scala 2.12)
+- Driver: Standard_E8_v3  
+- Workers: Standard D4ds_V5 [1 - 8]  
+- Enable Autoscaling   
+
+##### Python Packages:
+
+`%pip install -U langchain langchain_community langchain_openai databricks-vectorsearch`
+
+- Versions if needed:
+```
+langchain==0.2.5 
+langchain-community==0.2.5 
+mlflow==2.14.1 
+langchain_openai==0.1.9 
+databricks-vectorsearch==0.38
+```
+
 ### Notebooks
-##### FMAPI-Langchain-MLflow-Text-QA
+##### 1. FMAPI-Langchain-MLflow-Text-QA
 - Construct a RAG chain using Databricks Foundation Model APIs! 
     - DBRX
     - Databricks-BGE-Large
@@ -31,9 +61,9 @@ This collection is meant to get individuals quickly started in evaluating their 
     - DBRX
     - Llama-3-70b-Instruct 
 - Evaluate the chain using mlflow evaluate.
-##### Custom-Model-Langchain-MLflow-Text-QA
+##### 2. Custom-Model-Langchain-MLflow-Text-QA
 
-##### External-Models-OpenAI-Langchain-MLflow-Text-QA
+##### 3. External-Models-OpenAI-Langchain-MLflow-Text-QA
 - Construct a RAG chain using Langchain and Azure OpenAI models. 
     - ChatGPT 3.5 Turbo
     - Text Embedding Ada 002
@@ -42,7 +72,7 @@ This collection is meant to get individuals quickly started in evaluating their 
 
 ## Examples:  
 
-#### Foundation Model APIs and RAG
+#### 1. Foundation Model APIs and RAG
 
 ##### Evaluation of RAG (Retrieval-Augmented Generation) chain using Databricks Foundation Model APIs and MLflow!
 
@@ -77,11 +107,11 @@ llm = Databricks(endpoint_name="databricks-dbrx-instruct", transform_input_fn=tr
 ```
 
 ![Result Table](./img/RAG_results.png)
-#### Langchain RAG
+#### 2. Langchain RAG
 
 
 
-#### Open AI Models 
+#### 3. Open AI Models 
 
 ##### Evaluation of RAG (Retrieval-Augmented Generation) chain using Azure OpenAI [Databricks External Models] and MLflow!
 
