@@ -23,12 +23,28 @@ This collection is meant to get individuals quickly started in evaluating their 
 
 ### Requirements
 ### Notebooks
+##### FMAPI-Langchain-MLflow-Text-QA
+- Construct a RAG chain using Databricks Foundation Model APIs! 
+    - DBRX
+    - Databricks-BGE-Large
+- Use Databricks Foundation Model APIs for LLM-as-a-judge.
+    - DBRX
+    - Llama-3-70b-Instruct 
+- Evaluate the chain using mlflow evaluate.
+##### Custom-Model-Langchain-MLflow-Text-QA
+
+##### External-Models-OpenAI-Langchain-MLflow-Text-QA
+- Construct a RAG chain using Langchain and Azure OpenAI models. 
+    - ChatGPT 3.5 Turbo
+    - Text Embedding Ada 002
+- Use Databricks Foundation Model APIs for LLM-as-a-judge or ChatGPT. 
+- Evaluate the chain using mlflow evaluate. 
 
 ## Examples:  
 
-### Foundation Model APIs and RAG
+#### Foundation Model APIs and RAG
 
-#### Evaluation of RAG (Retrieval-Augmented Generation) chain using Databricks Foundation Model APIs and MLflow!
+##### Evaluation of RAG (Retrieval-Augmented Generation) chain using Databricks Foundation Model APIs and MLflow!
 
 - We will use langchain to pull MLflow documentation and chunk it. 
 - We will use the Databricks Foundation Model APIs to automatically compute embeddings from the chunks. 
@@ -39,7 +55,7 @@ This collection is meant to get individuals quickly started in evaluating their 
   - We will be using an additional LLM from the Foundation Model APIs to perform LLM-as-a-judge on our outputs. 
 - Finally, we will evaluate our RAG chain and display the results! 
 
-#### Using the Foundation Model APIs is as easy as the following:
+##### Using the Foundation Model APIs is as easy as the following:
 
 ```
 import os
@@ -61,13 +77,13 @@ llm = Databricks(endpoint_name="databricks-dbrx-instruct", transform_input_fn=tr
 ```
 
 ![Result Table](./img/RAG_results.png)
-### Langchain RAG
+#### Langchain RAG
 
 
 
-### Open AI Models 
+#### Open AI Models 
 
-#### Evaluation of RAG (Retrieval-Augmented Generation) chain using Azure OpenAI [Databricks External Models] and MLflow!
+##### Evaluation of RAG (Retrieval-Augmented Generation) chain using Azure OpenAI [Databricks External Models] and MLflow!
 
 - We will register the Azure Open AI gpt-35-turbo and text-embedding-ada-002 for use as external models.
 - We will use langchain to pull MLflow documentation and chunk it. 
@@ -79,7 +95,7 @@ llm = Databricks(endpoint_name="databricks-dbrx-instruct", transform_input_fn=tr
   - We will be using an additional LLM from the Foundation Model APIs to perform LLM-as-a-judge on our outputs. 
 - Finally, we will evaluate our RAG chain and display the results! 
 
-#### Registering an external model is as easy as the following:
+##### Registering an external model is as easy as the following:
 
 ```
 import mlflow.deployments
@@ -109,7 +125,7 @@ client.create_endpoint(
 )
 ```
 
-You can see the evaluation results after running mlflow.evaluate():
+##### You can see the evaluation results after running mlflow.evaluate():
 
 ![Result Table](./img/external_model_table.png)
 ![Cell UI](./img/external_model_cell.png)
