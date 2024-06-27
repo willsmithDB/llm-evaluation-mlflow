@@ -3,10 +3,12 @@
 
 __See the [technical blog](https://community.databricks.com/t5/technical-blog/mlops-gym-evaluating-large-language-models-with-mlflow/ba-p/72815) here for more information!__
 
-
 [![lines of code](https://tokei.rs/b1/github.com/willsmithDB/llm-evaluation-mlflow)]([https://codecov.io/github.com/willsmithDB/llm-evaluation-mlflow](https://github.com/willsmithDB/llm-evaluation-mlflow))
 
 This collection is meant to get individuals quickly started in evaluating their large language models and retrieval-augmented-generation chains with [mlflow evaluate](https://mlflow.org/docs/latest/llms/llm-evaluate/index.html)!
+
+### DISCLAIMER: 
+##### This is for reference and not meant to be for production environments. There is no SLA nor continued support as this is not an official Databricks asset. For more information, please contact your representative.
 
 NOTE: This repo works on Azure Databricks currently and would need slight configuration changes for AWS and GCP. 
 
