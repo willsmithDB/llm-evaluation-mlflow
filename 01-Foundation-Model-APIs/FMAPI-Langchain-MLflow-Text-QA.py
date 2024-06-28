@@ -28,11 +28,11 @@
 
 # COMMAND ----------
 
-# MAGIC %run "./utils/setup" $catalog_name="CATALOG" $schema_name="fmapi_eval" $volume_name="fmapi_vol" $vector_search_endpoint_name="VECTOR_SEARCH"
+# MAGIC %run ".././utils/setup" $catalog_name="CATALOG" $schema_name="fmapi_eval" $volume_name="fmapi_vol" $vector_search_endpoint_name="VECTOR_SEARCH"
 
 # COMMAND ----------
 
-# MAGIC %run "./utils/helpers" 
+# MAGIC %run ".././utils/helpers" 
 
 # COMMAND ----------
 
@@ -122,18 +122,15 @@ from langchain.embeddings import DatabricksEmbeddings
 
 
 def get_retriever(persist_dir: str = None):
-    
     vs_index = vsc.get_index(
         endpoint_name= vector_search_endpoint_name,
         index_name= vector_index_name
     )
-
     # Create the retriever
     vectorstore = DatabricksVectorSearch(
         vs_index, text_column="page_content"
     )
     return vectorstore.as_retriever()
-
 
 # test our retriever
 retriever = get_retriever()

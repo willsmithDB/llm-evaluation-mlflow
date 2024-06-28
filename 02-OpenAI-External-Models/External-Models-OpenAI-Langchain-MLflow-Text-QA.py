@@ -67,7 +67,7 @@ dbutils.library.restartPython()
 
 # COMMAND ----------
 
-# MAGIC %run "./utils/setup" $catalog_name= CATALOG_NAME $schema_name= SCHEMA_NAME $volume_name=VOLUME_NAME $vector_search_endpoint_name= VECTOR_SEARCH_ENDPOINT_NAME
+# MAGIC %run ".././utils/setup" $catalog_name= CATALOG_NAME $schema_name= SCHEMA_NAME $volume_name=VOLUME_NAME $vector_search_endpoint_name= VECTOR_SEARCH_ENDPOINT_NAME
 
 # COMMAND ----------
 
@@ -113,7 +113,7 @@ except:
 # COMMAND ----------
 
 # DBTITLE 1,Load helper functions
-# MAGIC %run "./utils/helpers"
+# MAGIC %run ".././utils/helpers"
 
 # COMMAND ----------
 
