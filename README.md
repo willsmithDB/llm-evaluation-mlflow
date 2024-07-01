@@ -1,13 +1,6 @@
 
 # [WIP] Evaluating Large Language Models with mlflow!
 
-.. image:: https://img.shields.io/badge/DBR-14.3ML-red?logo=databricks&style=for-the-badge
-   :target: https://docs.databricks.com/release-notes/runtime/14.3ml.html
-.. image:: https://img.shields.io/badge/CLOUD-AZURE-blue?logo=azure&style=for-the-badge
-   :target: https://azure.microsoft.com/en-us/products/databricks
-.. image:: https://img.shields.io/badge/POC-1_days-green?style=for-the-badge
-   :target: https://databricks.com/try-databricks
-
 __See the [technical blog](https://community.databricks.com/t5/technical-blog/mlops-gym-evaluating-large-language-models-with-mlflow/ba-p/72815) here for more information!__
 
 [![lines of code](https://tokei.rs/b1/https://github.com/willsmithDB/llm-evaluation-mlflow)]([https://codecov.io/github.com/willsmithDB/llm-evaluation-mlflow](https://github.com/willsmithDB/llm-evaluation-mlflow))
