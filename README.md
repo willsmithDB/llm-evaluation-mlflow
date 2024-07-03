@@ -73,6 +73,17 @@ databricks-vectorsearch==0.38
 - Evaluate the chain using mlflow evaluate.
 -----------
 ##### Custom-Model-Langchain-MLflow-Text-QA
+- Pull meta-llama/Meta-Llama-3-8B-Instruct from Huggingface and log the model using mlflow.
+- Deploy the model to a Databricks Model Serving endpoint for us in our RAG chain.
+
+- Construct a RAG chain using Langchain and our Custom Model Endpoint. 
+    - Llama-3-8b-Instruct
+    - Databricks-BGE-Large
+- Use Databricks Foundation Model APIs for LLM-as-a-judge
+    - Llama-3-8b-Instruct [Custom]
+    - DBRX
+    - Llama-3-70b-Instruct      
+- Evaluate the chain using mlflow evaluate. 
 -----------
 ##### External-Models-OpenAI-Langchain-MLflow-Text-QA
 - Construct a RAG chain using Langchain and Azure OpenAI models. 
@@ -119,7 +130,16 @@ llm = Databricks(endpoint_name="databricks-dbrx-instruct", transform_input_fn=tr
 ![Result Table](./img/RAG_results.png)
 
 -----------
-#### Langchain RAG
+#### Evaluation of RAG (Retrieval-Augmented Generation) chain using Databricks Model Serving (Llama3-8b) and MLflow!
+
+- We will use langchain to pull MLflow documentation and chunk it. 
+- We will pull meta-llama/Meta-Llama-3-8B-Instruct and deploy to Databricks Model Serving. 
+- We will use the Databricks Model Serving endpoint to automatically compute embeddings from the chunks. 
+- We will then create an index within a Databricks Vector Search index to hold the embeddings and act as a retriever for our RAG chain. 
+- We log all of this in mlflow so that we can have the run history and associated artifacts stored!
+- After creating the RAG chain, we will set up our evaluation metrics including toxicity and faithfulness. 
+  - We will be using an additional LLM from the Foundation Model APIs to perform LLM-as-a-judge on our outputs. 
+- Finally, we will evaluate our RAG chain and display the results! 
 
 -----------
 
