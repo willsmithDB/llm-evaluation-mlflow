@@ -238,9 +238,12 @@ client.create_endpoint(
 # COMMAND ----------
 
 # DBTITLE 1,Save initial data to a table in Unity Catalog
+from pyspark.sql.types import StructType, StructField, StringType, LongType
 from pyspark.sql.functions import col, monotonically_increasing_id
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
+
+schema = StructType([StructField('page_content', StringType(), True), StructField('type', StringType(), True), StructField('id', LongType(), True)])
 
 loader = WebBaseLoader("https://mlflow.org/docs/latest/index.html")
 documents = loader.load()
@@ -250,8 +253,7 @@ documents = loader.load()
 text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=32)
 docs = text_splitter.split_documents(documents)
 
-
-df = spark.createDataFrame(docs).drop(col("metadata")).withColumn("id", monotonically_increasing_id())
+df = spark.createDataFrame(docs, schema).drop(col("metadata")).withColumn("id", monotonically_increasing_id())
 
 display(df)
 

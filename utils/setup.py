@@ -32,7 +32,3 @@ llm_model = dbutils.widgets.get("llm_model")
 embeddings_model = dbutils.widgets.get("embeddings_model")
 vector_index_name = dbutils.widgets.get("vector_index")
 vector_index_schema = dbutils.widgets.get("vse_schema_name")
-
-# COMMAND ----------
-
-
