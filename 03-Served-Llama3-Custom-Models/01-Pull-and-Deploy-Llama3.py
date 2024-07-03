@@ -28,11 +28,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ".././utils/setup" $catalog_name="will_smith" $schema_name="llama_3_custom_eval" $volume_name="llama_3_custom_eval_vol" $vector_search_endpoint_name="one-env-shared-endpoint-7"
-
-# COMMAND ----------
-
-# %run ".././utils/setup" $catalog_name="CATALOG" $schema_name="llama_3_custom_eval" $volume_name="llama_3_custom_eval_vol" $vector_search_endpoint_name="VECTOR_SEARCH"
+# MAGIC %run ".././utils/setup" $catalog_name="custom_eval_catalog" $schema_name="llama_3_custom_eval" $volume_name="llama_3_custom_eval_vol" $vector_search_endpoint_name="meta_llama_3_8b_instruct"
 
 # COMMAND ----------
 
@@ -71,15 +67,20 @@ if(spark.sql(f"CREATE VOLUME IF NOT EXISTS {catalog_name}.{schema_name}.{volume_
 
 model_name = "meta-llama/Meta-Llama-3-8B-Instruct"
 revision = "e1945c40cd546c78e41f1151f4db032b271faeaa"
-secret_scope = "william_smith_secrets"
-secret_key = "HF_KEY"
+huggingface_key = ""
 model_save_path = f"{uc_save_path}.llama3_8b_evaluation"
 
 # COMMAND ----------
 
 from huggingface_hub import login
 
-login(token=dbutils.secrets.get('william_smith_secrets', 'HF_KEY'))
+# Use databricks secret scopes to hold credentials for huggingface access. 
+
+# secret_scope = ""
+# secret_key = ""
+# login(token=dbutils.secrets.get('william_smith_secrets', 'HF_KEY'))
+
+login(token=huggingface_key)
 
 # COMMAND ----------
 
@@ -153,49 +154,8 @@ with mlflow.start_run() as run:
 
 # COMMAND ----------
 
-import mlflow
-
-# Get the run ID from the last MLflow call
-# last_run_id = run_id
-
-# Construct the logged model URI
-# logged_model_uri = f"runs:/{last_run_id}/{model_save_path}"
-
-logged_model_uri = 'runs:/788046d477a6459f91638a37ab8e3d3a/will_smith.llama_3_custom_eval.llama3_8b_evaluation'
-
-# Load model as a PyFuncModel
-loaded_model = mlflow.transformers.load_model(logged_model_uri, device=0)
-
-# COMMAND ----------
-
-messages = [
-    {"role": "system", "content": "You are an expert on MLOps and Large Language Models."},
-    {"role": "user", "content": "What is the MLOps processing described in steps?"}
-]
-
-input_ids = tokenizer.apply_chat_template(
-    messages,
-    add_generation_prompt=True,
-    return_tensors="pt"
-).to(model.device)
-
-terminators = [
-    tokenizer.eos_token_id,
-    tokenizer.convert_tokens_to_ids("<|eot_id|>")
-]
-
-outputs = model.generate(
-    input_ids,
-    max_new_tokens=256,
-    eos_token_id=terminators,
-    do_sample=True,
-    temperature=0.6,
-    top_p=0.9,
-)
-response = outputs[0][input_ids.shape[-1]:]
-final_output = tokenizer.decode(response, skip_special_tokens=True)
-
-print(final_output)
+# MAGIC %md
+# MAGIC ## Deploy the model to a serving endpoint:
 
 # COMMAND ----------
 
@@ -203,7 +163,7 @@ print(final_output)
 version = "1"
 model_name = "llama_3_8b_evaluation"
 model_uc_path = model_save_path
-endpoint_name = f'{model_name}_ws'
+endpoint_name = f'{model_name}_eval'
 
 # Choose the right workload types based on the model size 
 # NOTE: FOR SOME REASON THIS IS NOT WORKING SO HARDCODED THE CONFIG
@@ -241,4 +201,59 @@ endpoint = client.create_endpoint(
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ## Query the new endpoint (After 45 - 90 minutes)
 
+# COMMAND ----------
+
+import mlflow.deployments
+
+import mlflow.deployments
+
+test_message = [{"role": "user", "content": "What is mlflow and how does it work with large language models?"}]
+
+client = mlflow.deployments.get_deploy_client("databricks")
+
+response = client.predict(
+            endpoint="meta_llama_3_8b_instruct",
+            inputs={
+                "messages": test_message, 
+                "max_tokens": 256,
+                }
+           )
+
+print(response)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Optional: Load model from mlflow. 
+# MAGIC Note: Clear GPU memory by running dbutils.library.restartPython(). May need to re-initialize specific variables. 
+
+# COMMAND ----------
+
+# %pip install -U langchain langchain_community databricks-vectorsearch mlflow
+
+# # Version locked if needed [outside of ML Databricks Runtime]: 
+# # langchain==0.0.348 langchain_community==0.0.1 databricks-vectorsearch==0.36
+
+# dbutils.library.restartPython()
+
+# COMMAND ----------
+
+# %run ".././utils/setup" $catalog_name="custom_eval_catalog" $schema_name="llama_3_custom_eval" $volume_name="llama_3_custom_eval_vol" $vector_search_endpoint_name="meta_llama_3_8b_instruct"
+
+# COMMAND ----------
+
+# DBTITLE 1,OPTIONAL: Load model from mlflow
+# import mlflow
+
+# Get the run ID from the last MLflow call
+# last_run_id = run_id
+
+# Construct the logged model URI
+# logged_model_uri = f"runs:/{last_run_id}/{model_save_path}"
+
+
+# Load model as a PyFuncModel
+# loaded_model = mlflow.transformers.load_model(logged_model_uri, device=0)

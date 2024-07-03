@@ -28,15 +28,15 @@
 
 # COMMAND ----------
 
-# MAGIC %run ".././utils/setup" $catalog_name="will_smith" $schema_name="llama_3_custom_eval" $volume_name="llama_3_custom_eval_vol" $vector_search_endpoint_name="one-env-shared-endpoint-7"
-
-# COMMAND ----------
-
-# %run ".././utils/setup" $catalog_name="CATALOG" $schema_name="llama_3_custom_eval" $volume_name="llama_3_custom_eval_vol" $vector_search_endpoint_name="VECTOR_SEARCH"
+# MAGIC %run ".././utils/setup" $catalog_name="custom_eval_catalog" $schema_name="llama_3_custom_eval" $volume_name="llama_3_custom_eval_vol" $vector_search_endpoint_name="meta_llama_3_8b_instruct"
 
 # COMMAND ----------
 
 # MAGIC %run ".././utils/helpers" 
+
+# COMMAND ----------
+
+model_endpoint_name = "meta_llama_3_8b_instruct"
 
 # COMMAND ----------
 
@@ -61,10 +61,6 @@ if(spark.sql(f"CREATE SCHEMA IF NOT EXISTS {catalog_name}.{vector_index_schema}"
 # DBTITLE 1,Creating a Databricks Volume
 if(spark.sql(f"CREATE VOLUME IF NOT EXISTS {catalog_name}.{schema_name}.{volume_name}")):
   print(f"Volume [{catalog_name}.{schema_name}.{volume_name}] created successfully!")
-
-# COMMAND ----------
-
-uc_save_path
 
 # COMMAND ----------
 
@@ -151,6 +147,24 @@ retriever = get_retriever()
 
 # COMMAND ----------
 
+import mlflow.deployments
+
+test_message = [{"role": "user", "content": "What is mlflow and how does it work with large language models?"}]
+
+client = mlflow.deployments.get_deploy_client("databricks")
+
+response = client.predict(
+            endpoint="meta_llama_3_8b_instruct",
+            inputs={
+                "messages": test_message, 
+                "max_tokens": 256,
+                }
+           )
+
+print(response)
+
+# COMMAND ----------
+
 # If running a Databricks notebook attached to an interactive cluster in "single user"
 # or "no isolation shared" mode, you only need to specify the endpoint name to create
 # a `Databricks` instance to query a serving endpoint in the same workspace.
@@ -160,14 +174,12 @@ retriever = get_retriever()
 # You can set those environment variables based on the notebook context if run on Databricks
 
 import os
-from langchain_community.llms import Databricks
+from langchain_community.chat_models.databricks import ChatDatabricks
+from langchain_core.messages import HumanMessage, SystemMessage
 
 # Need this for job run: 
 # os.environ['DATABRICKS_URL'] = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiUrl().getOrElse(None) 
 # os.environ['DATABRICKS_TOKEN'] = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiToken().getOrElse(None)
-
-from langchain.llms import Databricks
-from langchain_core.messages import HumanMessage, SystemMessage
 
 def transform_input(**request):
   request["messages"] = [
@@ -179,14 +191,17 @@ def transform_input(**request):
   del request["prompt"]
   return request
 
-# databricks-meta-llama-3-70b-instruct or databricks-dbrx-instruct
-# llm = Databricks(endpoint_name="databricks-dbrx-instruct", transform_input_fn=transform_input, extra_params={"temperature": 0.1, "max_tokens":1000})
-llm = Databricks(endpoint_name=llm_model, transform_input_fn=transform_input, extra_params={"temperature": 0.1, "max_tokens":512})
+# databricks-meta-llama-3-70b-instruct or databricks
+llm = ChatDatabricks(endpoint=model_endpoint_name, transform_input_fn=transform_input, extra_params={"temperature": 0.1, "max_tokens":512})
 
 #if you want answers to generate faster, set the number of tokens above to a smaller number
-prompt = "What is Generative AI?"
+prompt = "What is mlflow?"
 
-displayHTML(llm(prompt))
+output = llm.invoke(prompt)
+
+# COMMAND ----------
+
+print(output.content)
 
 # COMMAND ----------
 
@@ -195,7 +210,7 @@ from langchain.chains import RetrievalQA
 
 def build_qa_chain():
   
-  template = """You are a life sciences researcher with deep expertise in cystic fibrosis and related comorbidities. Below is an instruction that describes a task. Write a response that appropriately completes the request.
+  template = """You are an expert in machine learning engineering and machine learning operations. 
 
   ### Instruction:
   Use only information in the following paragraphs to answer the question. Explain the answer with reference to these paragraphs. If you don't know, say that you do not know.
@@ -230,7 +245,7 @@ qa_chain = build_qa_chain()
 
 question = "How would one evaluate gen ai models with mlflow?"
 
-result = qa_chain({"query": question})
+result = qa_chain.invoke({"query": question})
 # Check the result of the query
 print(result["result"])
 # Check the source document from where we draw from 
@@ -324,7 +339,7 @@ faithfulness_examples = [
 ]
 
 faithfulness_metric = faithfulness(
-    model="endpoints:/databricks-llama-2-70b-chat", examples=faithfulness_examples
+    model="endpoints:/databricks-meta-llama-3-70b-instruct", examples=faithfulness_examples
 )
 print(faithfulness_metric)
 
@@ -332,7 +347,7 @@ print(faithfulness_metric)
 
 from mlflow.metrics.genai import relevance, EvaluationExample
 
-relevance_metric = relevance(model="endpoints:/databricks-llama-2-70b-instruct")
+relevance_metric = relevance(model="endpoints:/databricks-meta-llama-3-70b-instruct")
 
 print(relevance_metric)
 
@@ -364,3 +379,7 @@ print(results.metrics)
 # COMMAND ----------
 
 results.tables["eval_results_table"]
+
+# COMMAND ----------
+
+
